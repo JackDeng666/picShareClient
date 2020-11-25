@@ -1,16 +1,121 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		// 测试
 		{
-			"path": "pages/index/index",
+			"path": "pages/test/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "测试"
+			}
+		},
+		// 主页面
+		{
+			"path": "pages/img/index",
+			"style": {
+				"navigationBarTitleText": "图片"
+			}
+		},
+		{
+			"path": "pages/package/index",
+			"style": {
+				"navigationBarTitleText": "图包"
+			}
+		},
+		{
+			"path": "pages/category/index",
+			"style": {
+				"navigationBarTitleText": "分类"
+			}
+		},
+		{
+			"path": "pages/person/index",
+			"style": {
+				"navigationBarTitleText": "个人"
+			}
+		},
+		// 子页面
+		{
+			"path": "pages/person/login",
+			"style": {
+				"navigationBarTitleText": "登陆"
+			}
+		},
+		{
+			"path": "pages/person/registration",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+		},
+		{
+			"path": "pages/upload/index",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
+		},
+		{
+			"path": "pages/imgDetail/index",
+			"style": {
+				"navigationBarTitleText": "图片详情"
+			}
+		},
+		{
+			"path": "pages/imgCategory/index",
+			"style": {
+				"navigationBarTitleText": "分类图片"
 			}
 		}
+		// {
+		// 	"path": "pages/detail/detail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "详情",
+		// 		"navigationBarBackgroundColor": "#000000",
+		// 		"backgroundColor": "#000000"
+		// 		// "app-plus": {
+		// 		// 	"bounce": "none",
+		// 		// 	"titleNView": {
+		// 		// 		"buttons": [{
+		// 		// 			"type": "share"
+		// 		// 		}]
+		// 		// 	}
+		// 		// },
+		// 		// "h5": {
+		// 		// 	"titleNView": {
+		// 		// 		"buttons": [{
+		// 		// 			"type": "favorite"
+		// 		// 		}]
+		// 		// 	}
+		// 		// }
+		// 	}
+		// }
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#000",
 		"backgroundColor": "#F8F8F8"
-	}
+	},
+	"tabBar": {
+		// "custom": true,
+    "color": "#8a8a8a",
+		"selectedColor": "#d4237a",
+		"backgroundColor": "#fff",
+		"position": "bottom",
+		"borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/img/index"
+			},
+			{
+        "pagePath": "pages/package/index"
+			},
+			{
+        "pagePath": "pages/category/index"
+			},
+      {
+        "pagePath": "pages/person/index"
+      }
+    ]
+  }
 }

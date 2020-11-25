@@ -1,4 +1,3 @@
-# uview-test
 
 ## Project setup
 ```
