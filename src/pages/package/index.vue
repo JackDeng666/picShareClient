@@ -4,14 +4,14 @@
 		<u-tabs-swiper activeColor="#d4237a" ref="tabs" :list="list" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
 	</view>
 
-  <view>
-    <view v-if="current==0">
-      jj
-    </view>
-    <view v-if="current==1">
-      kk
-    </view>
-  </view>
+  <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+		<swiper-item class="swiper-item">
+			<picList2/>
+		</swiper-item>
+		<swiper-item class="swiper-item">
+			<picList2/>
+		</swiper-item>
+	</swiper>
 
   <tab-bar :current="1"></tab-bar>
 </view>
@@ -32,13 +32,22 @@ export default {
           name: '最新'
         }
       ],
-      current: 0
+      current: 0,
+      swiperCurrent: 0
     }
   },
   methods: {
     change(index) {
-      this.current = index
-    }
+      this.swiperCurrent = index
+    },
+    transition({ detail: { dx } }) {
+			this.$refs.tabs.setDx(dx);
+		},
+		animationfinish({ detail: { current } }) {
+			this.$refs.tabs.setFinishCurrent(current);
+			this.swiperCurrent = current;
+			this.current = current;
+		}
   },
   onLoad(){
 

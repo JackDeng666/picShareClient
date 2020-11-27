@@ -4,12 +4,12 @@
 	},
 	"pages": [
 		// 测试
-		{
-			"path": "pages/test/index",
-			"style": {
-				"navigationBarTitleText": "测试"
-			}
-		},
+		// {
+		// 	"path": "pages/test/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "测试"
+		// 	}
+		// },
 		// 主页面
 		{
 			"path": "pages/img/index",
