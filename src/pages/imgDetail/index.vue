@@ -1,19 +1,16 @@
 <template>
-	<view class="index">
-		<swiper @change="swpierChange" :style="{height: screenHeight + 'px'}">
+	<view>
+		<swiper @change="swpierChange" :current="index" :style="{height: screenHeight + 'px'}">
 			<swiper-item v-for="(value,index) in data" :key="value" @click="preImg(index)">
 				<image :src="value" mode="widthFix"></image>
 			</swiper-item>
 		</swiper>
 
-		<view class="detail-btn-view">
-			<view class="download" @click="download"></view>
-			<view>ss</view>
-			<view class="setting" @click="setting">设为壁纸</view>
-			<!-- #ifdef APP-PLUS -->
-			<view v-if="showBtn" class="setting" @click="setting">设为壁纸</view>
-			<!-- #endif -->
-			<view class="collect" @click="collect"></view>
+		<view :class="isShowBtn ? 'detail-btn-view' : 'detail-btn-view hide'">
+			<u-icon :color="iconColor" :size="iconSize" name="photo" label="显示原图" :label-color="iconColor"></u-icon>
+			<u-icon @click="download" hover-class="pre" name="download" label="下载图片" :color="iconColor" :label-color="iconColor" :size="iconSize"></u-icon>
+			<u-icon @click="praise" hover-class="pre" name="thumb-up" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
+			<u-icon @click="collect" hover-class="pre" name="star" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
 		</view>
 		
 	</view>
@@ -25,27 +22,30 @@
 			return {
 				imgShow: false,
 				index: 0,
-				showBtn: false,
 				screenHeight: 0,
 				imgLength: 0,
 				providerList: [],
 				data: [],
-				detailDec: ""
+				detailDec: "",
+				isShowBtn: true,
+				iconColor: "white",
+				iconSize: 44,
+				iconTimer: null
 			}
 		},
 		onLoad() {
-      this.screenHeight = uni.getSystemInfoSync().windowHeight;
-      let {tdata} = getApp().globalData
-      console.log(tdata)
-			this.detailDec = tdata;
-			let data = JSON.parse(decodeURIComponent(tdata));
-			console.log(data)
-			this.imgLength = data.img_num;
-			this.data.push(data.img_src);
-			this.getData(data.id);
+      this.screenHeight = uni.getSystemInfoSync().windowHeight
+      let {imgList,imgIndex} = getApp().globalData
+      this.index = imgIndex
+			this.imgLength = imgList.length;
+			for(let i = 0; i < imgList.length; i++){
+				this.data.push(imgList[i].thumb)
+			}
 			uni.setNavigationBarTitle({
-				title: "1/" + this.imgLength
+				title: `${this.index}/${this.imgLength}`
 			})
+
+			console.log(this.index)
 		},
 		methods: {
 			download() {
@@ -76,6 +76,12 @@
 					}
 				})
 			},
+			praise(){
+				uni.showToast({
+					icon: 'none',
+					title: '点击点赞按钮'
+				})
+			},
 			collect() {
 				uni.showToast({
 					icon: 'none',
@@ -83,10 +89,19 @@
 				})
 			},
 			swpierChange(e) {
+				// 底部动画
+				clearTimeout(this.iconTimer)
+				this.isShowBtn = false
+				this.iconTimer = setTimeout(() => {
+					this.isShowBtn = true
+				}, 1000)
+
 				this.index = e.detail.current;
 				uni.setNavigationBarTitle({
 					title: e.detail.current + 1 + '/' + this.imgLength
 				})
+
+				console.log(this.index)
 			},
 			preImg(index) {
 				if (this.imgShow) { //防止点击过快导致重复调用 
@@ -102,53 +117,43 @@
 						urls: this.data
 					})
 				}, 150)
-			},
-			getData(e) {
-				uni.request({
-					url: this.$serverUrl + '/api/picture/detail.php?id=' + e,
-					success: (res) => {
-						if (res.data.code !== 0) {
-							uni.showModal({
-								content: '请求失败，失败原因：' + res.data.msg,
-								showCancel: false
-							})
-							return;
-						}
-						this.data = this.data.concat(res.data.data);
-					},
-					fail: () => {
-						uni.showModal({
-							content: '请求失败，请重试!',
-							showCancel: false
-						})
-					}
-				})
 			}
 		}
 	}
 </script>
 
-<style>
-	page {
-		background-color: #000;
-		height: 100%;
-	}
-
-	swiper {
-		flex: 1;
-		width: 750upx;
-		background-color: #000;
-		display: flex;
-		flex-direction: column;
-	}
-
-	swiper-item {
-		display: flex;
-		align-items: center;
-	}
-
-	image {
-		width: 750rpx;
-		/* height: 1125rpx; */
-	}
+<style lang="scss">
+page {
+	background-color: #000;
+	height: 100%;
+}
+swiper {
+	flex: 1;
+	width: 750upx;
+	background-color: #000;
+	display: flex;
+	flex-direction: column;
+}
+swiper-item {
+	display: flex;
+	align-items: center;
+}
+image {
+	width: 750rpx;
+}
+.detail-btn-view{
+	display: flex;
+	width: 750rpx;
+	position: fixed;
+	bottom: 20rpx;
+	justify-content:  space-around;
+	transition: .5s;
+}
+.detail-btn-view.hide{
+	bottom: -54rpx;
+}
+.pre{
+	color: #eee;
+	font-size: 40rpx;
+}
 </style>
