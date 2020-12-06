@@ -29,6 +29,12 @@
 			</u-cell-group>
 		</view>
 
+		<view class="u-m-t-20">
+			<u-cell-group :border="false">
+				<u-cell-item icon="close" title="退出登录" :border-bottom="false" @click="logout"></u-cell-item>
+			</u-cell-group>
+		</view>
+
 		<tab-bar :current="4"></tab-bar>
 	</view>
 </template>
@@ -49,19 +55,22 @@
 				} else {
 
 				}
+			},
+			getData(){
+				let data = uni.getStorageSync('userInfo')
+				if(data == ''){
+					this.userInfo = null
+				} else {
+					this.userInfo = data.userInfo
+				}
+			},
+			logout(){
+				uni.setStorageSync('userInfo', '')
+				this.getData()
 			}
 		},
-		onLoad(){
-			// uni.setStorageSync('userInfo', '{"avatar":"https://anotherbug.cn/img/favicon.73a3d704.png","name":"JackDeng","email":"1556393081@qq.com"}')
-			uni.setStorageSync('userInfo', '')
-			let data = uni.getStorageSync('userInfo')
-			if(data == ''){
-				this.userInfo = null
-				console.log("没有")
-			} else {
-				this.userInfo = JSON.parse(data)
-				console.log(this.userInfo)
-			}
+		onShow(){
+			this.getData()
 		}
 	}
 </script>

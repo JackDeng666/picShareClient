@@ -1,15 +1,14 @@
 <template>
 	<view class="content">
-		<!-- <view class="logo"><image src="../../static/comical.png" mode=""></image></view> -->
 		<u-form :model="model" ref="uForm">
-			<u-form-item :label-position="labelPosition" label="账号" prop="name">
-				<u-input :border="border" placeholder="请输入账号或邮箱" v-model="model.name" type="text"></u-input>
+			<u-form-item :label-position="labelPosition" label="账号" prop="account">
+				<u-input :border="border" placeholder="请输入账号或邮箱" v-model="model.account" type="text"></u-input>
 			</u-form-item>
 			<u-form-item :label-position="labelPosition" label="密码" prop="password">
 				<u-input :password-icon="true" :border="border" type="password" v-model="model.password" placeholder="请输入密码"></u-input>
 			</u-form-item>
 		</u-form>
-		<button type="primary">登陆</button>
+		<button type="primary" @click="submit">登陆</button>
 		<view class="links"><view class="link-highlight" @tap="gotoRegistration">注册账号</view></view>
 	</view>
 </template>
@@ -19,19 +18,29 @@
 		data() {
 			return {
 				model: {
-					name: '',
-					password: '',
-					rePassword: '',
-					email: ''
+					account: '',
+					password: ''
 				},
 				labelPosition: 'left',
 				border: false,
 			}
 		},
-		onLoad() {
-			
-		},
 		methods: {
+			async submit(){
+				let res = await this.$u.api.user.login(this.model)
+				if(res.status == 1688){
+					uni.setStorageSync('userInfo', res.data)
+					uni.navigateBack({  
+						delta: 1
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '登录失败',
+						duration: 1000
+					})
+				}
+			},
 			gotoRegistration: function () {
 				uni.navigateTo({url: '/pages/person/registration'})
 			},

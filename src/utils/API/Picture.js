@@ -3,10 +3,10 @@ class Picture {
     this.http = http
   }
   async getCategory(){
-    return await this.http.get('picture/category')
+    return await this.http.get('category/getAll')
   }
-  async picTest(params){
-    return await this.http.get('picture', params)
+  async addPicList(params){
+    return await this.http.post('pic/addPicList', params)
   }
 }
 

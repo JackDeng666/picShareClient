@@ -49,6 +49,12 @@
 			}
 		},
 		{
+			"path": "pages/upload/createPicList",
+			"style": {
+				"navigationBarTitleText": "创建图集"
+			}
+		},
+		{
 			"path": "pages/upload/index",
 			"style": {
 				"navigationBarTitleText": "上传"

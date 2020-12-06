@@ -59,6 +59,8 @@ export default {
   },
   async onLoad(){
     let res = await this.$u.api.picture.getCategory()
+    console.log(res)
+    getApp().globalData.categorys = res.data
   }
 }
 </script>

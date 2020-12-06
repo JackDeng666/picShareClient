@@ -1,14 +1,13 @@
 <template>
 	<scroll-view @scrolltolower="handleToLower" class="scroll" scroll-y v-if="recommends.length > 0">
-		<!-- 推荐开始 -->
+		
 		<view class="recommend_wrap">
 			<view class="recommend_item"
 				v-for="item in recommends" :key="item.id">
 				<image mode="widthFix" :src="item.thumb"></image>
 			</view>
 		</view>
-		<!-- 推荐结束 -->
-		<!-- 月份开始 -->
+
 		<view class="months_wrap">
 			<view class="months_title">
 				<view class="months_title_info">
@@ -28,10 +27,6 @@
 				</view>
 			</view>
 		</view>
-		<!-- 月份结束 -->
-		<!-- 热门开始 -->
-
-		<!-- 热门结束 -->
 	</scroll-view>
 </template>
 

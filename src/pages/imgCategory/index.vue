@@ -1,26 +1,5 @@
 <template>
 <view class="wrap">
-  <!-- <view class="tab_title">
-    <view class="tab">
-      <u-tabs 
-        :list="items" 
-        :is-scroll="false" 
-        :current="current" 
-        @change="change" 
-        active-color="#d4237a">
-      </u-tabs>
-    </view>
-  </view>
-
-  <view>
-    <view v-show="current==0">
-      <picList1 :cid="id" type="byCategory" order="new" />
-    </view>
-    <view v-show="current==1">
-      <picList1 :cid="id" type="byCategory" order="hot" />
-    </view>
-  </view> -->
-
   <view class="u-tabs-box" style="z-index: 0;">
 		<u-tabs-swiper activeColor="#d4237a" ref="tabs" :list="items" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
 	</view>

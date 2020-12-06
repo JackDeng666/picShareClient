@@ -12,9 +12,24 @@
 export default {
   methods: {
     submit(type) {
-      uni.navigateTo({
-        url: `/pages/upload/index?type=${type}`
-      })
+      let data = uni.getStorageSync('userInfo')
+      if(data == ''){
+        return uni.showToast({
+          icon: 'none',
+          title: '请先登录',
+          duration: 1000
+        })
+      }
+      if(type == 0){
+        uni.navigateTo({
+          url: `/pages/upload/index?type=0`
+        })
+      }
+      if(type == 1){
+        uni.navigateTo({
+          url: `/pages/upload/createPicList`
+        })
+      }
     }
   }
 }
