@@ -5,6 +5,7 @@ import User from './User'
 
 // 此处第二个参数vm，就是我们在页面使用的this
 const install = (Vue, vm) => {
+  Vue.prototype.$basicUrl = BASIC_URL
   // 此为自定义配置参数，具体参数见上方说明
 	Vue.prototype.$u.http.setConfig({
     baseUrl: BASIC_URL, 
@@ -20,6 +21,7 @@ const install = (Vue, vm) => {
   
   let picture = new Picture(vm.$u)
   let user = new User(vm.$u)
+  
 	vm.$u.api = {
     picture, 
     user

@@ -1,6 +1,6 @@
 <template>
 <view class="tab-bar">
-  <u-popup v-model="show" mode="top" length="50%">
+  <u-popup v-model="show" mode="top" length="30%">
     <share></share>
   </u-popup>
   <view v-for="(item, index) in list" :key="index" :class="['tab-bar-item', item.bulge ? 'bulge' : '']" :data-path="item.pagePath" :data-index="index" @click="switchTab">

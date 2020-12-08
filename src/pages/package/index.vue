@@ -6,10 +6,10 @@
 
   <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 		<swiper-item class="swiper-item">
-			<picList2/>
+			<picList2 order="new"/>
 		</swiper-item>
 		<swiper-item class="swiper-item">
-			<picList2/>
+			<picList2 order="hot"/>
 		</swiper-item>
 	</swiper>
 

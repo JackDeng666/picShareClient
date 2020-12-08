@@ -55,6 +55,12 @@
 			}
 		},
 		{
+			"path": "pages/upload/choiceTag",
+			"style": {
+				"navigationBarTitleText": "选择标签"
+			}
+		},
+		{
 			"path": "pages/upload/index",
 			"style": {
 				"navigationBarTitleText": "上传"

@@ -1,18 +1,17 @@
 <template>
 	<view>
-		<swiper @change="swpierChange" :current="index" :style="{height: screenHeight + 'px'}">
-			<swiper-item v-for="(value,index) in data" :key="value" @click="preImg(index)">
-				<image :src="value" mode="widthFix"></image>
+		<swiper @change="swpierChange" :current="index" :style="{height: screenHeight + 'px'}" v-if="isShowSwiper">
+			<swiper-item v-for="(item, index) in data" :key="index" @click="preImg(index)">
+				<image :src="item.url" mode="widthFix"></image>
 			</swiper-item>
 		</swiper>
 
 		<view :class="isShowBtn ? 'detail-btn-view' : 'detail-btn-view hide'">
-			<u-icon :color="iconColor" :size="iconSize" name="photo" label="显示原图" :label-color="iconColor"></u-icon>
+			<u-icon @click="showOd" :color="iconColor" :size="iconSize" name="photo" :label="labelShow" :label-color="iconColor"></u-icon>
 			<u-icon @click="download" hover-class="pre" name="download" label="下载图片" :color="iconColor" :label-color="iconColor" :size="iconSize"></u-icon>
 			<u-icon @click="praise" hover-class="pre" name="thumb-up" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
 			<u-icon @click="collect" hover-class="pre" name="star" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
 		</view>
-		
 	</view>
 </template>
 
@@ -24,30 +23,55 @@
 				index: 0,
 				screenHeight: 0,
 				imgLength: 0,
-				providerList: [],
 				data: [],
-				detailDec: "",
+				imgList: [],
 				isShowBtn: true,
 				iconColor: "white",
 				iconSize: 44,
-				iconTimer: null
+				iconTimer: null,
+				isShowSwiper: true
 			}
 		},
 		onLoad() {
       this.screenHeight = uni.getSystemInfoSync().windowHeight
-      let {imgList,imgIndex} = getApp().globalData
+			let {imgList,imgIndex} = getApp().globalData
+			this.imgList = imgList
       this.index = imgIndex
 			this.imgLength = imgList.length;
 			for(let i = 0; i < imgList.length; i++){
-				this.data.push(imgList[i].thumb)
+				this.data.push({
+					isTumb: true,
+					url: this.$basicUrl + imgList[i].thumbnailUrl
+				})
 			}
 			uni.setNavigationBarTitle({
-				title: `${this.index}/${this.imgLength}`
+				title: `${this.index+1}/${this.imgLength}`
 			})
-
-			console.log(this.index)
+		},
+		computed: {
+			labelShow() {
+				return this.data[this.index].isTumb ? '显示原图' : '显示缩略图'
+			},
 		},
 		methods: {
+			showOd(){
+				if(this.data[this.index].isTumb){
+					this.data.splice(this.index, 1, {
+						isTumb: false,
+						url: this.$basicUrl + this.imgList[this.index].odUrl
+					})
+				} else {
+					this.data.splice(this.index, 1, {
+						isTumb: true,
+						url: this.$basicUrl + this.imgList[this.index].odUrl
+					})
+				}
+				// 重现
+				this.isShowSwiper = false
+				this.$nextTick(() => {
+					this.isShowSwiper = true
+				})
+			},
 			download() {
 				uni.downloadFile({
 					url: this.data[this.index],
@@ -100,8 +124,6 @@
 				uni.setNavigationBarTitle({
 					title: e.detail.current + 1 + '/' + this.imgLength
 				})
-
-				console.log(this.index)
 			},
 			preImg(index) {
 				if (this.imgShow) { //防止点击过快导致重复调用 
@@ -128,18 +150,15 @@ page {
 	height: 100%;
 }
 swiper {
-	flex: 1;
-	width: 750upx;
+	// flex: 1;
+	// width: 750rpx;
 	background-color: #000;
-	display: flex;
-	flex-direction: column;
+	// display: flex;
+	// flex-direction: column;
 }
 swiper-item {
 	display: flex;
 	align-items: center;
-}
-image {
-	width: 750rpx;
 }
 .detail-btn-view{
 	display: flex;

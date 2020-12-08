@@ -24,7 +24,7 @@ export default {
 	},
 	data() {
 		return {
-			items: [{name: "最新"},{name: "热门"}],
+			items: [{name: "最新图片"},{name: "热门图片"}],
       current: 0,
       swiperCurrent: 0,
       id: 0

@@ -2,6 +2,12 @@ class Picture {
   constructor(http){
     this.http = http
   }
+  async getPicList(params){
+    return await this.http.get('pic/picList', params)
+  }
+  async getPicSetList(params){
+    return await this.http.get('pic/picSetList', params)
+  }
   async getCategory(){
     return await this.http.get('category/getAll')
   }

@@ -2,8 +2,8 @@
 <scroll-view scroll-y class="scroll" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
   <view class="content">
     <view class="item" v-for="(item,index) in picList" :key="item.id">
-      <go-detail :list="picList" :index="index">
-        <image :src="item.thumb" mode="widthFix"></image>
+      <go-detail :list="picList" :index="index" type="single">
+        <image :src="$basicUrl + item.thumbnailUrl" mode="aspectFill"></image>
       </go-detail>
     </view>
   </view>
@@ -24,9 +24,10 @@ export default {
 	data() {
 		return {
       params: {
-        limit: 30,
-        skip: 0,
-        order: "new"
+        currentPage: 1,
+        pageSize: 10,
+        type: "new",
+        enable: 0
       },
       picList: [],
       hasMore: true
@@ -37,21 +38,17 @@ export default {
       let res
       switch(this.type){
         case 'byCategory':
-          this.params.order = this.order
-          res = await this.request({
-            url: `https://service.picasso.adesk.com/v1/vertical/category/${this.cid}/vertical`,
-            data: this.params
-          })
+          this.params.type = this.order
+          this.params.categoryId = this.cid
+          res = await this.$u.api.picture.getPicList(this.params)
           break;
         case 'no':
           this.params.order = this.order  
-          res = await this.request({
-            url: "http://service.picasso.adesk.com/v3/homepage/vertical",
-            data: this.params
-          })
+          res = await this.$u.api.picture.getPicList(this.params)
           break;
       }
-      if(res.res.vertical.length === 0){
+      console.log(res)
+      if(res.data.length === 0){
         this.hasMore = false
         uni.showToast({
           title: '没有数据了',
@@ -59,11 +56,11 @@ export default {
         })
         return
       }
-      this.picList.push(...res.res.vertical) 
+      this.picList.push(...res.data) 
     },
     handleScrolltolower(){
       if(this.hasMore){
-        this.params.skip += this.params.limit,
+        this.params.currentPage += 1,
         this.getList()
       } else {
         uni.showToast({

@@ -2,11 +2,11 @@
 <view class="category_box">
 	<navigator 
 		class="cate_item"
-		v-for="item in category"
-		:key="item.id"
-		:url="`/pages/imgCategory/index?id=${item.id}&name=${item.name}`">
-		<image :src="item.cover" mode="aspectFill"></image>
-		<view class="cate_name">{{item.name}}</view>
+		v-for="item in categorys"
+		:key="item.categoryId"
+		:url="`/pages/imgCategory/index?id=${item.categoryId}&name=${item.categoryName}`">
+		<image :src="$basicUrl + item.signUrl" mode="aspectFill"></image>
+		<view class="cate_name">{{item.categoryName}}</view>
 	</navigator>
 	<tab-bar :current="3"></tab-bar>
 </view>
@@ -16,15 +16,13 @@
 export default {
 	data() {
 		return {
-			category: []
+			categorys: []
 		}
 	},
 	methods: {
 		async getList(){
-			let res = await this.request({
-				url: 'https://service.picasso.adesk.com/v1/vertical/category'
-			})
-			this.category = res.res.category
+			let {categorys} = getApp().globalData
+			this.categorys = categorys
 		}
 	},
 	onLoad(){
@@ -34,10 +32,15 @@ export default {
 </script>
 
 <style lang="scss">
+page {
+	background-color: #fff;
+	height: 100%;
+}
 .category_box {
 	display: flex;
 	flex-wrap: wrap;
 	padding-bottom: 98rpx;
+	
   .cate_item {
 		width: 33.33%;
 		position: relative;

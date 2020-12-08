@@ -1,15 +1,23 @@
 <template>
 <view class="root">
-  <u-image width="30%" height="30%" mode="widthFix" src="../static/comical.png" class="img"></u-image>
+  <!-- <u-alert-tips class="title" type="warning" title="登高望远" description=""></u-alert-tips> -->
   <view class="share_box">
-    <u-button class="btn" type="error" shape="square" @click="submit(0)">单图上传</u-button>
-    <u-button class="btn" type="primary" shape="square" @click="submit(1)">图集上传</u-button>
+    <u-button :custom-style="btnStyle" size="default" type="error" shape="square" @click="submit(0)">单图上传</u-button>
+    <u-button :custom-style="btnStyle" size="default" type="primary" shape="square" @click="submit(1)">图集上传</u-button>
   </view>
 </view>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      btnStyle: {
+        width: '75%',
+        margin: '20rpx auto'
+      },
+    }
+  },
   methods: {
     submit(type) {
       let data = uni.getStorageSync('userInfo')
@@ -22,7 +30,7 @@ export default {
       }
       if(type == 0){
         uni.navigateTo({
-          url: `/pages/upload/index?type=0`
+          url: `/pages/upload/choiceTag`
         })
       }
       if(type == 1){
@@ -37,10 +45,9 @@ export default {
 
 <style lang="scss" scoped>
 .root{
-  height: 50vh;
+  height: 30vh;
   position: relative;
-  .img{
-    height: 60%;
+  .title{
     position: absolute;
     left: 50%;
     top: 20%;
@@ -50,10 +57,6 @@ export default {
     width: 100%;
     position: absolute;
     bottom: 0;
-    .btn{
-      width: 80%;
-      margin: 20rpx auto;
-    }
   }
 }
 </style>

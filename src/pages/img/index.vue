@@ -5,9 +5,9 @@
 	</view>
 
   <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
-		<swiper-item class="swiper-item">
+		<!-- <swiper-item class="swiper-item">
 			<home/>
-		</swiper-item>
+		</swiper-item> -->
 		<swiper-item class="swiper-item">
 			<picList1 type="no" order="new"/>
 		</swiper-item>
@@ -31,9 +31,9 @@ export default {
   data() {
     return {
       list: [
-        {
-          name: '首页'
-        },
+        // {
+        //   name: '首页'
+        // },
         {
           name: '最热'
         }, {

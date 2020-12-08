@@ -1,21 +1,15 @@
 <template>
 <view>
   <view class="up_box">
-
-    <view class="form_box" v-if="type==1">
-      得到
-    </view>
-    <!-- <u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select> -->
-    
     <u-upload 
       ref="uUpload"
       :action="action"
       :form-data="model"
       :auto-upload="false"
-      :max-size="5 * 1024 * 1024" 
+      :max-size="100 * 1024 * 1024" 
       :max-count="maxCount"
       @on-uploaded="allOk"
-      @on-success="onSuc">
+      @on-change="change">
     </u-upload>
 
     <u-button class="btn" type="success" @click="uploadSubmit">提交</u-button>
@@ -32,20 +26,25 @@ export default {
   data() {
     return {
       type: 0, // 单图上传还是图集上传
-      action: URL + 'picture/addPic', // 上传地址
+      action: '', // 上传地址
       maxCount: 1,
-      model: {
-				packageName: '',
-				category: '',
-        intro: ''
-      },
+      model: {},
     }
   },
   methods: {
+    change(res, index, lists, name){
+      console.log(res)
+    },
     allOk(lists, name){
       uni.hideLoading()
+      uni.showToast({
+        icon: 'none',
+        title: '上传成功',
+        duration: 1000
+      })
     },
     uploadSubmit() {
+      console.log(this.model)
       uni.showLoading({
         title: '上传中...'
       })
@@ -55,12 +54,23 @@ export default {
      this.$refs.uUpload.clear()
     },
     back(){
-      uni.navigateBack()
+      uni.navigateBack({  
+        delta: 2
+      })
     }
   },
   mounted(){
-    if(this.type==1){
+    let {currentUploadData} = getApp().globalData
+    if(this.type == 0){
+      this.model.userId = currentUploadData.userId
+      this.model.categorys = JSON.stringify(currentUploadData.categorys)
+      this.action = URL + 'pic/uploadSinglePic'
+    }
+    if(this.type == 1){
       this.maxCount = 50
+      this.model.picList = JSON.stringify(currentUploadData.picList)
+      this.model.categorys = JSON.stringify(currentUploadData.categorys)
+      this.action = URL + 'pic/uploadPicToList'
     }
   },
   onLoad(options){

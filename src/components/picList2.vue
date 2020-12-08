@@ -2,33 +2,35 @@
 	<scroll-view scroll-y class="scroll" @scrolltolower="handleScrolltolower">
 		<u-waterfall v-model="flowList">
 			<template v-slot:left="{leftList}">
-				<view v-for="item in leftList" :key="item.guid">
-					<!-- <go-detail :list="picList" :index="0"> -->
+				<view v-for="item in leftList" :key="item.picListId">
+					<go-detail :list="item.pictures" :index="0" type="list">
 						<view class="panel">
-							<image class="card-img" :src="item.img_src"></image>
-							<text class="card-num-view">{{item.img_num}}P</text>
+							<image class="card-img" :src="$basicUrl + item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
+							<text class="card-num-view">{{item.pictures.length}}P</text>
 							<view class="card-bottm">
 								<view class="car-title-view">
-									<text class="card-title">{{item.title}}</text>
-									<text class="card-title">{{item.guid}}</text>
+									<text class="card-title">{{item.picListName}}</text>
+									<!-- <text class="card-title">{{item.intro}}</text> -->
 								</view>
 							</view>
 						</view>
-					<!-- </go-detail> -->
+					</go-detail>
 				</view>
 			</template>
 			<template v-slot:right="{rightList}">
-				<view v-for="item in rightList" :key="item.guid">
-					<view class="panel">
-						<image class="card-img" :src="item.img_src"></image>
-						<text class="card-num-view">{{item.img_num}}P</text>
-						<view class="card-bottm">
-							<view class="car-title-view">
-								<text class="card-title">{{item.title}}</text>
-								<text class="card-title">{{item.guid}}</text>
+				<view v-for="item in rightList" :key="item.picListId">
+					<go-detail :list="item.pictures" :index="0" type="list">
+						<view class="panel">
+							<image class="card-img" :src="$basicUrl + item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
+							<text class="card-num-view">{{item.pictures.length}}P</text>
+							<view class="card-bottm">
+								<view class="car-title-view">
+									<text class="card-title">{{item.picListName}}</text>
+									<!-- <text class="card-title">{{item.intro}}</text> -->
+								</view>
 							</view>
 						</view>
-					</view>
+					</go-detail>
 				</view>
 			</template>
 		</u-waterfall>
@@ -40,13 +42,20 @@ import goDetail from "./goDetail"
 export default {
 	components: {
     goDetail
+	},
+	props: {
+    order: String
   },
 	data() {
 		return {
-			refreshing: false,
-			lists: [],
-			fetchPageNum: 1,
-			flowList: []
+			params: {
+        currentPage: 1,
+        pageSize: 10,
+        type: "new",
+        enable: 0
+      },
+			flowList: [],
+			hasMore: true
 		}
 	},
 	created() {
@@ -54,61 +63,13 @@ export default {
 	},
 	methods: {
 		handleScrolltolower(){
-			// 模拟数据加载
-			setTimeout(() => {
-				this.getData()
-			}, 1000)
+			
 		},
-		getData() {
-			uni.request({
-				url: this.$serverUrl + '/api/picture/posts.php?page=' + (this.refreshing ? 1 : this.fetchPageNum) +
-					'&per_page=10',
-				success: (ret) => {
-					console.log(ret)
-					if (ret.statusCode !== 200) {
-						console.log('请求失败:', ret)
-					} else {
-						if (this.refreshing && ret.data[0].id === this.lists[0].id) {
-							uni.showToast({
-								title: '已经最新',
-								icon: 'none',
-							});
-							this.refreshing = false;
-							uni.stopPullDownRefresh();
-							return;
-						}
-						let list = [],
-							data = ret.data;
-						for (let i = 0, length = data.length; i < length; i++) {
-							var item = data[i];
-							item.guid = this.newGuid() + item.id
-							if(i == 0){
-								item.guid = item.guid + "哒哒哒打打阿达嗒嗒嗒哒哒哒打打打答"
-							}
-							list.push(item)
-						}
-						console.log('得到list', list)
-						if (this.refreshing) {
-							this.refreshing = false
-							uni.stopPullDownRefresh()
-							this.lists = list
-							this.flowList = list
-							this.fetchPageNum = 2
-						} else {
-							this.lists = this.lists.concat(list)
-							this.flowList = this.flowList.concat(list)
-							this.fetchPageNum += 1
-						}
-						
-					}
-				}
-			});
-		},
-		newGuid() {
-			let s4 = function() {
-				return (65536 * (1 + Math.random()) | 0).toString(16).substring(1);
-			}
-			return (s4() + s4() + "-" + s4() + "-4" + s4().substr(0, 3) + "-" + s4() + "-" + s4() + s4() + s4()).toUpperCase();
+		async getData() {
+			this.params.order = this.order  
+			let res = await this.$u.api.picture.getPicSetList(this.params)
+			console.log(res)
+			this.flowList = res.data
 		}
 	}
 }
