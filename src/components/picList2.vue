@@ -9,8 +9,8 @@
 							<text class="card-num-view">{{item.pictures.length}}P</text>
 							<view class="card-bottm">
 								<view class="car-title-view">
+									<u-tag :text="tag.category.categoryName" shape="circle" mode="dark" v-for="tag in item.tags" :key="tag.tagId"/>
 									<text class="card-title">{{item.picListName}}</text>
-									<!-- <text class="card-title">{{item.intro}}</text> -->
 								</view>
 							</view>
 						</view>
@@ -25,8 +25,8 @@
 							<text class="card-num-view">{{item.pictures.length}}P</text>
 							<view class="card-bottm">
 								<view class="car-title-view">
+									<u-tag :text="tag.category.categoryName" shape="circle" mode="dark" v-for="tag in item.tags" :key="tag.tagId"/>
 									<text class="card-title">{{item.picListName}}</text>
-									<!-- <text class="card-title">{{item.intro}}</text> -->
 								</view>
 							</view>
 						</view>
@@ -77,8 +77,7 @@ export default {
 
 <style>
 .scroll {
-  height: calc(100vh - 36px);
-  margin-bottom: 100rpx;
+  height: calc(100vh - 36px - 190rpx);
 }
 .panel {
 	position: relative;
@@ -94,7 +93,9 @@ export default {
 	font-size: 13px;
 	text-align: center;
 }
-
+.u-tag{
+	margin: 0 5rpx;
+}
 .card-num-view {
 	background-color: #FF80AB;
 	line-height: 1;

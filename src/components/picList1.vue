@@ -78,7 +78,7 @@ export default {
 
 <style lang="scss">
 .scroll {
-  height: calc(100vh - 36px);
+  height: calc(100vh - 36px - 190rpx);
   .content {
     display: flex;
     flex-wrap: wrap;

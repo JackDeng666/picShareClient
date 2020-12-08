@@ -1,16 +1,16 @@
 <template>
 	<view>
 		<swiper @change="swpierChange" :current="index" :style="{height: screenHeight + 'px'}" v-if="isShowSwiper">
-			<swiper-item v-for="(item, index) in data" :key="index" @click="preImg(index)">
-				<image :src="item.url" mode="widthFix"></image>
+			<swiper-item v-for="(value, index) in data" :key="index" @click="preImg(index)">
+				<image :src="value" mode="widthFix"></image>
 			</swiper-item>
 		</swiper>
 
 		<view :class="isShowBtn ? 'detail-btn-view' : 'detail-btn-view hide'">
 			<u-icon @click="showOd" :color="iconColor" :size="iconSize" name="photo" :label="labelShow" :label-color="iconColor"></u-icon>
 			<u-icon @click="download" hover-class="pre" name="download" label="下载图片" :color="iconColor" :label-color="iconColor" :size="iconSize"></u-icon>
-			<u-icon @click="praise" hover-class="pre" name="thumb-up" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
-			<u-icon @click="collect" hover-class="pre" name="star" label="5465" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
+			<u-icon @click="praise" hover-class="pre" name="thumb-up" :label="praiseNum" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
+			<u-icon @click="collect" hover-class="pre" name="star" :label="collectNum" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
 		</view>
 	</view>
 </template>
@@ -39,10 +39,8 @@
       this.index = imgIndex
 			this.imgLength = imgList.length;
 			for(let i = 0; i < imgList.length; i++){
-				this.data.push({
-					isTumb: true,
-					url: this.$basicUrl + imgList[i].thumbnailUrl
-				})
+				this.data.push(this.$basicUrl + imgList[i].thumbnailUrl)
+				this.imgList[i].isTumb = true 
 			}
 			uni.setNavigationBarTitle({
 				title: `${this.index+1}/${this.imgLength}`
@@ -50,22 +48,29 @@
 		},
 		computed: {
 			labelShow() {
-				return this.data[this.index].isTumb ? '显示原图' : '显示缩略图'
+				return this.imgList[this.index].isTumb ? '显示原图' : '显示缩略图'
 			},
+			praiseNum(){
+				return this.imgList[this.index].praiseNum
+			},
+			collectNum(){
+				return this.imgList[this.index].collectNum
+			}
 		},
 		methods: {
 			showOd(){
-				if(this.data[this.index].isTumb){
-					this.data.splice(this.index, 1, {
-						isTumb: false,
-						url: this.$basicUrl + this.imgList[this.index].odUrl
-					})
+				if(this.imgList[this.index].isTumb){
+					this.data.splice(this.index, 1, this.$basicUrl + this.imgList[this.index].odUrl)
+					this.imgList[this.index].isTumb = false 
+					let o = this.imgList[this.index]
+					this.$set(this.imgList,this.index,o)
 				} else {
-					this.data.splice(this.index, 1, {
-						isTumb: true,
-						url: this.$basicUrl + this.imgList[this.index].odUrl
-					})
+					this.data.splice(this.index, 1, this.$basicUrl + this.imgList[this.index].thumbnailUrl)
+					this.imgList[this.index].isTumb = true 
+					let o = this.imgList[this.index]
+					this.$set(this.imgList,this.index,o)
 				}
+				this.$set(this.imgList,'xx','xx')
 				// 重现
 				this.isShowSwiper = false
 				this.$nextTick(() => {
@@ -150,11 +155,11 @@ page {
 	height: 100%;
 }
 swiper {
-	// flex: 1;
-	// width: 750rpx;
+	flex: 1;
+	width: 750rpx;
 	background-color: #000;
-	// display: flex;
-	// flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 swiper-item {
 	display: flex;
