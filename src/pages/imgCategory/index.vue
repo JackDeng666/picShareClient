@@ -6,10 +6,16 @@
 
   <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 		<swiper-item class="swiper-item">
+			<picList1 :cid="id" type="byCategory" order="hot" />
+		</swiper-item>
+		<swiper-item class="swiper-item">
 			<picList1 :cid="id" type="byCategory" order="new" />
 		</swiper-item>
 		<swiper-item class="swiper-item">
-			<picList1 :cid="id" type="byCategory" order="hot" />
+			<picList2 :cid="id" type="byCategory" order="hot" />
+		</swiper-item>
+		<swiper-item class="swiper-item">
+			<picList2 :cid="id" type="byCategory" order="new" />
 		</swiper-item>
 	</swiper>
 
@@ -18,13 +24,15 @@
 
 <script>
 import picList1 from "../../components/picList1"
+import picList2 from "../../components/picList2"
 export default {
 	components: {
-    picList1
+		picList1,
+		picList2
 	},
 	data() {
 		return {
-			items: [{name: "最新图片"},{name: "热门图片"}],
+			items: [{name: "热门图片"},{name: "最新图片"},{name: "热门图集"},{name: "最新图集"}],
       current: 0,
       swiperCurrent: 0,
       id: 0
@@ -51,13 +59,6 @@ export default {
 </script>
 
 <style lang="scss">
-// .tab_title{
-//   background-color: #fff;
-//   .tab{
-//     width: 60%;
-//     margin: 0 auto;
-//   }
-// }
 .wrap {
 	display: flex;
 	flex-direction: column;

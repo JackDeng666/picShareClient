@@ -94,7 +94,7 @@ export default {
   background: #FFF;
   display: flex;
   line-height: 1.2;
-  padding-bottom: env(safe-area-inset-bottom);
+  /* padding-bottom: env(safe-area-inset-bottom); */
   border-top: 1px solid #e6e6e6;
   box-shadow: 0 -1px 1px rgba(0,0,0,.05);
 }

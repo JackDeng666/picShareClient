@@ -9,8 +9,8 @@
 		<view :class="isShowBtn ? 'detail-btn-view' : 'detail-btn-view hide'">
 			<u-icon @click="showOd" :color="iconColor" :size="iconSize" name="photo" :label="labelShow" :label-color="iconColor"></u-icon>
 			<u-icon @click="download" hover-class="pre" name="download" label="下载图片" :color="iconColor" :label-color="iconColor" :size="iconSize"></u-icon>
-			<u-icon @click="praise" hover-class="pre" name="thumb-up" :label="praiseNum" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
-			<u-icon @click="collect" hover-class="pre" name="star" :label="collectNum" :color="iconColor" :size="iconSize" :label-color="iconColor"></u-icon>
+			<u-icon @click="praise" hover-class="pre" name="thumb-up-fill" :label="praiseNum" :color="pColor" :size="iconSize" :label-color="pColor"></u-icon>
+			<u-icon @click="collect" hover-class="pre" name="star-fill" :label="collectNum" :color="cColor" :size="iconSize" :label-color="cColor"></u-icon>
 		</view>
 	</view>
 </template>
@@ -29,7 +29,10 @@
 				iconColor: "white",
 				iconSize: 44,
 				iconTimer: null,
-				isShowSwiper: true
+				isShowSwiper: true,
+				userId: 0,
+				pColor: '#d52a7e',
+				cColor: '#d52a7e',
 			}
 		},
 		onLoad() {
@@ -45,6 +48,13 @@
 			uni.setNavigationBarTitle({
 				title: `${this.index+1}/${this.imgLength}`
 			})
+			let data = uni.getStorageSync('userInfo')
+			if(data == ''){
+				this.userId = 0
+			} else {
+				this.userId = data.userInfo.userId
+			}
+			this.getPraiseAndCollectInfo()
 		},
 		computed: {
 			labelShow() {
@@ -105,23 +115,79 @@
 					}
 				})
 			},
-			praise(){
-				uni.showToast({
-					icon: 'none',
-					title: '点击点赞按钮'
-				})
+			check(){
+				let data = uni.getStorageSync('userInfo')
+				if(this.userId == 0){
+					uni.showToast({
+						icon: 'none',
+						title: '请先登录',
+						duration: 1000
+					})
+					return false
+				}
+				return true
 			},
-			collect() {
-				uni.showToast({
-					icon: 'none',
-					title: '点击收藏按钮'
+			async praise(){
+				if(this.check()){
+					let res = await this.$u.api.statistics.togglePraise({
+						userId: this.userId,
+						pictureId: this.imgList[this.index].pictureId
+					})
+					if(res.data.isCancel == 0){
+						this.imgList[this.index].praiseNum += 1
+						this.pColor = '#d52a7e'
+					} 
+					if(res.data.isCancel == 1) {
+						this.imgList[this.index].praiseNum -= 1
+						this.pColor = 'white'
+					}
+				}
+			},
+			async collect() {
+				if(this.check()){
+					let res = await this.$u.api.statistics.toggleCollect({
+						userId: this.userId,
+						ojectId: this.imgList[this.index].pictureId,
+						objectType: 1
+					})
+					if(res.data.isCancel == 0){
+						this.imgList[this.index].collectNum += 1
+						this.cColor = '#d52a7e'
+					} 
+					if(res.data.isCancel == 1) {
+						this.imgList[this.index].collectNum -= 1
+						this.cColor = 'white'
+					}
+				}
+			},
+			async getPraiseAndCollectInfo(){
+				let res = await this.$u.api.statistics.getPraiseAndCollectInfo({
+					userId: this.userId,
+					pictureId: this.imgList[this.index].pictureId,
 				})
+				if(res.data.praiseInfo == undefined){
+					this.pColor = 'white'
+				} else if(res.data.praiseInfo.isCancel == 0){
+					this.pColor = '#d52a7e'
+				} else {
+					this.pColor = 'white'
+				}
+				if(res.data.collectInfo == undefined){
+					this.cColor = 'white'
+				} else if(res.data.collectInfo.isCancel == 0){
+					this.cColor = '#d52a7e'
+				} else {
+					this.cColor = 'white'
+				}
+				this.imgList[this.index].praiseNum = res.data.pictureInfo.praiseNum
+				this.imgList[this.index].collectNum = res.data.pictureInfo.collectNum
 			},
 			swpierChange(e) {
 				// 底部动画
 				clearTimeout(this.iconTimer)
 				this.isShowBtn = false
 				this.iconTimer = setTimeout(() => {
+					this.getPraiseAndCollectInfo()
 					this.isShowBtn = true
 				}, 1000)
 

@@ -6,10 +6,10 @@
 
   <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 		<swiper-item class="swiper-item">
-			<picList2 order="new"/>
+			<picList2 type="no" order="hot"/>
 		</swiper-item>
 		<swiper-item class="swiper-item">
-			<picList2 order="hot"/>
+			<picList2 type="no" order="new"/>
 		</swiper-item>
 	</swiper>
 
@@ -48,9 +48,6 @@ export default {
 			this.swiperCurrent = current;
 			this.current = current;
 		}
-  },
-  onLoad(){
-
   }
 }
 </script>
@@ -61,6 +58,7 @@ export default {
 	flex-direction: column;
 	height: calc(100vh - var(--window-top));
 	width: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .swiper-box {
 	flex: 1;

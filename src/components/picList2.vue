@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-y class="scroll" @scrolltolower="handleScrolltolower">
+	<scroll-view scroll-y :style="sstyle" @scrolltolower="handleScrolltolower">
 		<u-waterfall v-model="flowList">
 			<template v-slot:left="{leftList}">
 				<view v-for="item in leftList" :key="item.picListId">
@@ -44,13 +44,18 @@ export default {
     goDetail
 	},
 	props: {
-    order: String
+		type: String,
+    cid: String,
+		order: String
   },
 	data() {
 		return {
+			sstyle: {
+        height: "calc(100vh - 36px - 100rpx)"
+      },
 			params: {
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 8,
         type: "new",
         enable: 0
       },
@@ -58,26 +63,67 @@ export default {
 			hasMore: true
 		}
 	},
-	created() {
-		this.getData()
-	},
+	
 	methods: {
 		handleScrolltolower(){
-			
+			if(this.hasMore){
+        this.params.currentPage += 1,
+        this.getData()
+      } else {
+        uni.showToast({
+          title: '没有数据了',
+          icon: 'none'
+        })
+      }
 		},
 		async getData() {
-			this.params.order = this.order  
 			let res = await this.$u.api.picture.getPicSetList(this.params)
 			console.log(res)
-			this.flowList = res.data
-		}
+			let data = res.data.filter(el => {
+				return el.pictures.length > 0
+			})
+			console.log(data)
+			if(data.length === 0){
+        this.hasMore = false
+        uni.showToast({
+          title: '没有数据了',
+          icon: 'none'
+        })
+        return
+      }
+			this.flowList.push(...data)
+		},
+		init(){
+      switch(this.type){
+        case 'byCategory':
+          this.params.type = this.order
+          this.params.categoryId = this.cid
+          this.sstyle = {
+            height: "calc(100vh - 36px - 100rpx)"
+          }
+          break;
+        case 'no':
+          this.params.type = this.order
+          this.sstyle = {
+            height: "calc(100vh - 36px - 200rpx)"
+          }
+          break;
+      }
+    }
+	},
+	created() {
+		this.init()
+		this.getData()
 	}
 }
 </script>
 
 <style>
-.scroll {
-  height: calc(100vh - 36px - 190rpx);
+.scroll-1 {
+  height: calc(100vh - 36px - 100rpx);
+}
+.scroll-2 {
+  height: calc(100vh - 36px - 200rpx);
 }
 .panel {
 	position: relative;

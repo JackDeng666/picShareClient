@@ -2,6 +2,7 @@ import BASIC_URL from './config'
 
 import Picture from './Picture'
 import User from './User'
+import Statistics from './Statistics'
 
 // 此处第二个参数vm，就是我们在页面使用的this
 const install = (Vue, vm) => {
@@ -21,10 +22,12 @@ const install = (Vue, vm) => {
   
   let picture = new Picture(vm.$u)
   let user = new User(vm.$u)
+  let statistics = new Statistics(vm.$u)
   
 	vm.$u.api = {
     picture, 
-    user
+    user,
+    statistics
   }
 }
 

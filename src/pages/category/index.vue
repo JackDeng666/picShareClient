@@ -21,8 +21,8 @@ export default {
 	},
 	methods: {
 		async getList(){
-			let {categorys} = getApp().globalData
-			this.categorys = categorys
+			let res = await this.$u.api.picture.getCategory()
+			this.categorys = res.data
 		}
 	},
 	onLoad(){

@@ -1,5 +1,5 @@
 <template>
-<scroll-view scroll-y class="scroll" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
+<scroll-view scroll-y :style="sstyle" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
   <view class="content">
     <view class="item" v-for="(item,index) in picList" :key="item.id">
       <go-detail :list="picList" :index="index" type="single">
@@ -23,9 +23,12 @@ export default {
   },
 	data() {
 		return {
+      sstyle: {
+        height: "calc(100vh - 36px - 100rpx)"
+      },
       params: {
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 9,
         type: "new",
         enable: 0
       },
@@ -35,18 +38,7 @@ export default {
 	},
 	methods: {
     async getList(){
-      let res
-      switch(this.type){
-        case 'byCategory':
-          this.params.type = this.order
-          this.params.categoryId = this.cid
-          res = await this.$u.api.picture.getPicList(this.params)
-          break;
-        case 'no':
-          this.params.order = this.order  
-          res = await this.$u.api.picture.getPicList(this.params)
-          break;
-      }
+      let res = await this.$u.api.picture.getPicList(this.params)
       console.log(res)
       if(res.data.length === 0){
         this.hasMore = false
@@ -68,24 +60,39 @@ export default {
           icon: 'none'
         })
       }
+    },
+    init(){
+      switch(this.type){
+        case 'byCategory':
+          this.params.type = this.order
+          this.params.categoryId = this.cid
+          this.sstyle = {
+            height: "calc(100vh - 36px - 100rpx)"
+          }
+          break;
+        case 'no':
+          this.params.type = this.order
+          this.sstyle = {
+            height: "calc(100vh - 36px - 200rpx)"
+          }
+          break;
+      }
     }
   },
   created(){
+    this.init()
     this.getList()
   }
 }
 </script>
 
 <style lang="scss">
-.scroll {
-  height: calc(100vh - 36px - 190rpx);
-  .content {
-    display: flex;
-    flex-wrap: wrap;
-    .item {
-      width: 33.3%;
-      border: 5rpx solid #222;
-    }
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  .item {
+    width: 33.3%;
+    border: 5rpx solid #222;
   }
 }
 </style>

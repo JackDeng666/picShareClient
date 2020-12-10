@@ -75,7 +75,7 @@ export default {
               duration: 1000
             })
             getApp().globalData.currentUploadData = res.data
-            uni.navigateTo({
+            uni.redirectTo({
               url: `/pages/upload/index?type=1`
             })
           } else {
@@ -96,12 +96,15 @@ export default {
     },
     checkboxGroupChange(e) {
       this.model.categorys = e
-		}
+    },
+    initData(){
+      let {categorys} = getApp().globalData
+      this.selectList = JSON.parse(JSON.stringify(categorys))
+    }
   },
   mounted(){
     this.$refs.uForm.setRules(this.rules)
-    let {categorys} = getApp().globalData
-    this.selectList = categorys
+    this.initData()
   }
 }
 </script>

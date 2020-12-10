@@ -9,10 +9,10 @@
 			<home/>
 		</swiper-item> -->
 		<swiper-item class="swiper-item">
-			<picList1 type="no" order="new"/>
+			<picList1 type="no" order="hot"/>
 		</swiper-item>
 		<swiper-item class="swiper-item">
-			<picList1 type="no" order="hot"/>
+			<picList1 type="no" order="new"/>
 		</swiper-item>
 	</swiper>
   
@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import home from "./home"
+// import home from "./home"
 import picList1 from "../../components/picList1"
 export default {
   components: {
-    home,
+    // home,
     picList1
   },
   data() {
@@ -59,7 +59,6 @@ export default {
   },
   async onLoad(){
     let res = await this.$u.api.picture.getCategory()
-    console.log(res)
     getApp().globalData.categorys = res.data
   }
 }
@@ -71,6 +70,7 @@ export default {
 	flex-direction: column;
 	height: calc(100vh - var(--window-top));
 	width: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .swiper-box {
 	flex: 1;
