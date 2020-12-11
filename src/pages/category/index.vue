@@ -5,7 +5,7 @@
 		v-for="item in categorys"
 		:key="item.categoryId"
 		:url="`/pages/imgCategory/index?id=${item.categoryId}&name=${item.categoryName}`">
-		<image :src="$basicUrl + item.signUrl" mode="aspectFill"></image>
+		<image :src="item.signUrl" mode="aspectFill"></image>
 		<view class="cate_name">{{item.categoryName}}</view>
 	</navigator>
 	<tab-bar :current="3"></tab-bar>
@@ -22,6 +22,9 @@ export default {
 	methods: {
 		async getList(){
 			let res = await this.$u.api.picture.getCategory()
+			res.data.forEach(el => {
+				el.signUrl = this.$basicUrl + el.signUrl
+			})
 			this.categorys = res.data
 		}
 	},

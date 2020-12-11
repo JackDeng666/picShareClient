@@ -42,7 +42,7 @@
       this.index = imgIndex
 			this.imgLength = imgList.length;
 			for(let i = 0; i < imgList.length; i++){
-				this.data.push(this.$basicUrl + imgList[i].thumbnailUrl)
+				this.data.push(imgList[i].thumbnailUrl)
 				this.imgList[i].isTumb = true 
 			}
 			uni.setNavigationBarTitle({
@@ -70,12 +70,12 @@
 		methods: {
 			showOd(){
 				if(this.imgList[this.index].isTumb){
-					this.data.splice(this.index, 1, this.$basicUrl + this.imgList[this.index].odUrl)
+					this.data.splice(this.index, 1, this.imgList[this.index].odUrl)
 					this.imgList[this.index].isTumb = false 
 					let o = this.imgList[this.index]
 					this.$set(this.imgList,this.index,o)
 				} else {
-					this.data.splice(this.index, 1, this.$basicUrl + this.imgList[this.index].thumbnailUrl)
+					this.data.splice(this.index, 1, this.imgList[this.index].thumbnailUrl)
 					this.imgList[this.index].isTumb = true 
 					let o = this.imgList[this.index]
 					this.$set(this.imgList,this.index,o)

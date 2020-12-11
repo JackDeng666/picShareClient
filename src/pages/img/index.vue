@@ -41,7 +41,7 @@ export default {
         }
       ],
       current: 0,
-			swiperCurrent: 0,
+      swiperCurrent: 0
     }
   },
   methods: {

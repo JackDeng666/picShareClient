@@ -1,11 +1,11 @@
 <template>
-	<scroll-view scroll-y :style="sstyle" @scrolltolower="handleScrolltolower">
+	<scroll-view class="scroll" scroll-y :style="sstyle" @scrolltolower="handleScrolltolower">
 		<u-waterfall v-model="flowList">
 			<template v-slot:left="{leftList}">
 				<view v-for="item in leftList" :key="item.picListId">
 					<go-detail :list="item.pictures" :index="0" type="list">
 						<view class="panel">
-							<image class="card-img" :src="$basicUrl + item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
+							<image class="card-img" :src="item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
 							<text class="card-num-view">{{item.pictures.length}}P</text>
 							<view class="card-bottm">
 								<view class="car-title-view">
@@ -21,7 +21,7 @@
 				<view v-for="item in rightList" :key="item.picListId">
 					<go-detail :list="item.pictures" :index="0" type="list">
 						<view class="panel">
-							<image class="card-img" :src="$basicUrl + item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
+							<image class="card-img" :src="item.pictures[0].thumbnailUrl" mode="aspectFill"></image>
 							<text class="card-num-view">{{item.pictures.length}}P</text>
 							<view class="card-bottm">
 								<view class="car-title-view">
@@ -63,7 +63,6 @@ export default {
 			hasMore: true
 		}
 	},
-	
 	methods: {
 		handleScrolltolower(){
 			if(this.hasMore){
@@ -79,6 +78,12 @@ export default {
 		async getData() {
 			let res = await this.$u.api.picture.getPicSetList(this.params)
 			console.log(res)
+			res.data.forEach(ele => {
+				ele.pictures.forEach(el => {
+					el.thumbnailUrl = this.$basicUrl + el.thumbnailUrl
+        	el.odUrl = this.$basicUrl + el.odUrl
+				})
+      })
 			let data = res.data.filter(el => {
 				return el.pictures.length > 0
 			})
@@ -111,6 +116,9 @@ export default {
       }
     }
 	},
+	onShow(){
+    console.log("2 ddd")
+  },
 	created() {
 		this.init()
 		this.getData()
@@ -119,11 +127,9 @@ export default {
 </script>
 
 <style>
-.scroll-1 {
+.scroll{
+	width: 100%;
   height: calc(100vh - 36px - 100rpx);
-}
-.scroll-2 {
-  height: calc(100vh - 36px - 200rpx);
 }
 .panel {
 	position: relative;

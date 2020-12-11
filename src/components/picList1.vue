@@ -1,9 +1,9 @@
 <template>
-<scroll-view scroll-y :style="sstyle" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
+<scroll-view scroll-y class="scroll" :style="sstyle" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
   <view class="content">
     <view class="item" v-for="(item,index) in picList" :key="item.id">
       <go-detail :list="picList" :index="index" type="single">
-        <image :src="$basicUrl + item.thumbnailUrl" mode="aspectFill"></image>
+        <image :src="item.thumbnailUrl" mode="aspectFill"></image>
       </go-detail>
     </view>
   </view>
@@ -48,6 +48,10 @@ export default {
         })
         return
       }
+      res.data.forEach(el => {
+        el.thumbnailUrl = this.$basicUrl + el.thumbnailUrl
+        el.odUrl = this.$basicUrl + el.odUrl
+      })
       this.picList.push(...res.data) 
     },
     handleScrolltolower(){
@@ -79,6 +83,9 @@ export default {
       }
     }
   },
+  onShow(){
+    console.log("1 ddd")
+  },
   created(){
     this.init()
     this.getList()
@@ -87,6 +94,10 @@ export default {
 </script>
 
 <style lang="scss">
+.scroll{
+  width: 100%;
+  height: calc(100vh - 36px - 100rpx);
+}
 .content {
   display: flex;
   flex-wrap: wrap;

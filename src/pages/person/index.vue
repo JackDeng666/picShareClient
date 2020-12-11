@@ -2,7 +2,7 @@
 	<view>
 		<view class="u-flex user-box u-p-l-10 u-p-r-20 u-p-b-10" @click="go">
 			<view class="u-m-r-10">
-				<u-avatar :src="userInfo == null ? '../../static/comical.png'	: userInfo.avatar" size="140"></u-avatar>
+				<u-avatar :src="userInfo.avatar" size="140"></u-avatar>
 			</view>
 
 			<view class="u-flex-1">
