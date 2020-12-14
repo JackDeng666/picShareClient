@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="scroll" scroll-y :style="sstyle" @scrolltolower="handleScrolltolower">
+	<scroll-view scroll-y :style="{height: heightText}" @scrolltolower="handleScrolltolower">
 		<u-waterfall v-model="flowList">
 			<template v-slot:left="{leftList}">
 				<view v-for="item in leftList" :key="item.picListId">
@@ -50,12 +50,10 @@ export default {
   },
 	data() {
 		return {
-			sstyle: {
-        height: "calc(100vh - 36px - 100rpx)"
-      },
+			heightText: "calc(100vh - 36px - 100rpx)",
 			params: {
         currentPage: 1,
-        pageSize: 8,
+        pageSize: 10,
         type: "new",
         enable: 0
       },
@@ -103,23 +101,16 @@ export default {
         case 'byCategory':
           this.params.type = this.order
           this.params.categoryId = this.cid
-          this.sstyle = {
-            height: "calc(100vh - 36px - 100rpx)"
-          }
+          this.heightText = "calc(100vh - 36px)"
           break;
         case 'no':
           this.params.type = this.order
-          this.sstyle = {
-            height: "calc(100vh - 36px - 200rpx)"
-          }
+          this.heightText = "calc(100vh - 36px - 100rpx)"
           break;
       }
     }
 	},
-	onShow(){
-    console.log("2 ddd")
-  },
-	created() {
+	mounted() {
 		this.init()
 		this.getData()
 	}
@@ -127,10 +118,6 @@ export default {
 </script>
 
 <style>
-.scroll{
-	width: 100%;
-  height: calc(100vh - 36px - 100rpx);
-}
 .panel {
 	position: relative;
 	border-radius: 10rpx;

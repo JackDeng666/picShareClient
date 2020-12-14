@@ -30,7 +30,13 @@ export default {
 	},
 	onLoad(){
 		this.getList()
-	}
+	},
+	onPullDownRefresh() {
+    setTimeout(() => {
+      this.getList()
+      uni.stopPullDownRefresh()
+    }, 1000)
+  }
 }
 </script>
 

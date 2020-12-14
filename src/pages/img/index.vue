@@ -4,7 +4,7 @@
 		<u-tabs-swiper activeColor="#d4237a" ref="tabs" :list="list" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
 	</view>
 
-  <swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+  <swiper v-if="show" class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 		<!-- <swiper-item class="swiper-item">
 			<home/>
 		</swiper-item> -->
@@ -41,7 +41,8 @@ export default {
         }
       ],
       current: 0,
-      swiperCurrent: 0
+      swiperCurrent: 0,
+      show: true
     }
   },
   methods: {
@@ -55,11 +56,18 @@ export default {
 			this.$refs.tabs.setFinishCurrent(current);
 			this.swiperCurrent = current;
 			this.current = current;
-		}
+    },
   },
   async onLoad(){
     let res = await this.$u.api.picture.getCategory()
     getApp().globalData.categorys = res.data
+  },
+  onPullDownRefresh() {
+    this.show = false
+    setTimeout(() => {
+      this.show = true
+      uni.stopPullDownRefresh()
+    }, 1000)
   }
 }
 </script>

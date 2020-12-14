@@ -1,5 +1,5 @@
 <template>
-<scroll-view scroll-y class="scroll" :style="sstyle" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
+<scroll-view scroll-y :style="{height: heightText}" @scrolltolower="handleScrolltolower" v-if="picList.length > 0">
   <view class="content">
     <view class="item" v-for="(item,index) in picList" :key="item.id">
       <go-detail :list="picList" :index="index" type="single">
@@ -23,12 +23,10 @@ export default {
   },
 	data() {
 		return {
-      sstyle: {
-        height: "calc(100vh - 36px - 100rpx)"
-      },
+      heightText: 'calc(100vh - 36px - 100rpx)',
       params: {
         currentPage: 1,
-        pageSize: 9,
+        pageSize: 15,
         type: "new",
         enable: 0
       },
@@ -70,23 +68,16 @@ export default {
         case 'byCategory':
           this.params.type = this.order
           this.params.categoryId = this.cid
-          this.sstyle = {
-            height: "calc(100vh - 36px - 100rpx)"
-          }
+          this.heightText = "calc(100vh - 36px)"
           break;
         case 'no':
           this.params.type = this.order
-          this.sstyle = {
-            height: "calc(100vh - 36px - 200rpx)"
-          }
+          this.heightText = "calc(100vh - 36px - 100rpx)"
           break;
       }
     }
   },
-  onShow(){
-    console.log("1 ddd")
-  },
-  created(){
+  mounted(){
     this.init()
     this.getList()
   }
@@ -94,10 +85,6 @@ export default {
 </script>
 
 <style lang="scss">
-.scroll{
-  width: 100%;
-  height: calc(100vh - 36px - 100rpx);
-}
 .content {
   display: flex;
   flex-wrap: wrap;

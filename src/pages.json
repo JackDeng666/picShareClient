@@ -14,19 +14,22 @@
 		{
 			"path": "pages/img/index",
 			"style": {
-				"navigationBarTitleText": "图片"
+				"navigationBarTitleText": "图片",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/package/index",
 			"style": {
-				"navigationBarTitleText": "图包"
+				"navigationBarTitleText": "图包",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/category/index",
 			"style": {
-				"navigationBarTitleText": "分类"
+				"navigationBarTitleText": "分类",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
