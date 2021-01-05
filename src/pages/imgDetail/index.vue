@@ -80,7 +80,7 @@
 					let o = this.imgList[this.index]
 					this.$set(this.imgList,this.index,o)
 				}
-				this.$set(this.imgList,'xx','xx')
+				// this.$set(this.imgList,'xx','xx')
 				// 重现
 				this.isShowSwiper = false
 				this.$nextTick(() => {
@@ -133,6 +133,8 @@
 						userId: this.userId,
 						pictureId: this.imgList[this.index].pictureId
 					})
+					console.log(this.imgList[this.index].pictureId)
+					console.log(res)
 					if(res.data.isCancel == 0){
 						this.imgList[this.index].praiseNum += 1
 						this.pColor = '#d52a7e'

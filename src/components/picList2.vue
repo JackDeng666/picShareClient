@@ -55,7 +55,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
         type: "new",
-        enable: 0
+        enable: 1
       },
 			flowList: [],
 			hasMore: true

@@ -28,7 +28,7 @@ export default {
         currentPage: 1,
         pageSize: 15,
         type: "new",
-        enable: 0
+        enable: 1
       },
       picList: [],
       hasMore: true

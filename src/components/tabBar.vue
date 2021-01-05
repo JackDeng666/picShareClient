@@ -41,7 +41,7 @@ export default {
         },
         {
           pagePath: "/pages/package/index",
-          text: "图包",
+          text: "图集",
           iconPath: "/static/package.png",
           selectedIconPath: "/static/package_active.png"
         },

@@ -21,7 +21,7 @@
 		{
 			"path": "pages/package/index",
 			"style": {
-				"navigationBarTitleText": "图包",
+				"navigationBarTitleText": "图集",
 				"enablePullDownRefresh": true
 			}
 		},
